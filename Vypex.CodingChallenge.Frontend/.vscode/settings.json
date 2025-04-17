@@ -1,0 +1,18 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single",
+  "html.format.wrapAttributes": "preserve-aligned",
+  "html.format.wrapLineLength": 180,
+  "scss.format.spaceAroundSelectorSeparator": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "files.trimTrailingWhitespace": true,
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true
+}

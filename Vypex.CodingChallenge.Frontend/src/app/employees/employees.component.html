@@ -1,0 +1,14 @@
+<nz-table nzTemplateMode>
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (employee of employees$ | async; track employee.id) {
+    <tr>
+      <td>{{ employee.name }}</td>
+    </tr>
+    }
+  </tbody>
+</nz-table>

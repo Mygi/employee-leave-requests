@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vypex.CodingChallenge.Service", "Vypex.CodingChallenge.Service\Vypex.CodingChallenge.Service.csproj", "{4D219900-1F87-4C13-9C54-128C92177F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vypex.CodingChallenge.Domain", "Vypex.CodingChallenge.Domain\Vypex.CodingChallenge.Domain.csproj", "{9648CF16-3D54-4E22-ACE6-56B55EFAA5CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vypex.CodingChallenge.Infrastructure", "Vypex.CodingChallenge.Infrastructure\Vypex.CodingChallenge.Infrastructure.csproj", "{28C43388-B786-46C4-8ECD-8A03BB39A0CE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vypex.CodingChallenge.API", "Vypex.CodingChallenge.API\Vypex.CodingChallenge.API.csproj", "{1DED6343-F764-4145-A57B-5A2209046916}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D219900-1F87-4C13-9C54-128C92177F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D219900-1F87-4C13-9C54-128C92177F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D219900-1F87-4C13-9C54-128C92177F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D219900-1F87-4C13-9C54-128C92177F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9648CF16-3D54-4E22-ACE6-56B55EFAA5CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9648CF16-3D54-4E22-ACE6-56B55EFAA5CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9648CF16-3D54-4E22-ACE6-56B55EFAA5CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9648CF16-3D54-4E22-ACE6-56B55EFAA5CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28C43388-B786-46C4-8ECD-8A03BB39A0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28C43388-B786-46C4-8ECD-8A03BB39A0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28C43388-B786-46C4-8ECD-8A03BB39A0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28C43388-B786-46C4-8ECD-8A03BB39A0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DED6343-F764-4145-A57B-5A2209046916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DED6343-F764-4145-A57B-5A2209046916}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DED6343-F764-4145-A57B-5A2209046916}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DED6343-F764-4145-A57B-5A2209046916}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1BAF6D80-1A2F-47E3-A532-1CE3CA9EA716}
+	EndGlobalSection
+EndGlobal
