@@ -1,0 +1,50 @@
+# Coding Challenge Tasks
+
+This is the following Schedule and Processing of tasks for implementing the staff leave feature
+
+- [x] Planning (9:30)
+- [x] `npm install` and `git init` (9:40)
+- [x] Create feature branch
+- [ ] Create Remote on Github
+- [ ] Backend
+	- [ ] Add Leave Table
+	- [ ] Add migrations
+	- [ ] Add seeded data
+	- [ ] Add Calculated Leave field in User Table
+	- [ ] Add Services and DTOs to Controller/API layer. A new project may be required but no obvious justification to do that yet.
+	- [ ] Add DTOs with 
+		- [ ] Add Leave Request
+		- [ ] Update Leave Request
+		- [ ] Delete Leave Request
+		- [ ] UserWithLeave Model
+	- [ ] Add Service Interface
+	- [ ] Add Service with Dependency Injection
+		- [ ] Add Get all
+		- [ ] Get Get Single
+		- [ ] Add Update Leave
+		- [ ] Add Delete Leave
+		- [ ] Add Update Leave
+		- [ ] Add Check for overlapping
+		- [ ] Add Business Day Calculator
+	- [ ] Add API endpoints to Controller and Link to Service
+	- [ ] Test
+- FrontEnd
+	- [ ] Add Layout
+	- [ ] Check on initial build bundle size
+	- [ ] Add API requests
+		- [ ] Add API caching
+		- [ ] Add API error handling
+		- [ ] Add Signal
+	- [ ] Connect API to Component
+	- [ ] All Users Component
+		- [ ] Add Column to table for leave summary
+		- [ ] Add Column for View Leave
+		- [ ] Add Modal Component for view all leave. 
+			- [ ] Use a Table for summary
+			- [ ] Add an Add Leave form
+			- [ ] Add a modify Leave form
+			- [ ] Add a Delete leave form
+		- [ ] Connect endpoints to Service
+		- [ ] Handle State Changes
+		- [ ] Add Alerts and Messaging for changes in state
+	- [ ] Test
