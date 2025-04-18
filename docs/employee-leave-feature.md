@@ -2,49 +2,54 @@
 
 This is the following Schedule and Processing of tasks for implementing the staff leave feature
 
-- [x] Planning (9:30)
-- [x] `npm install` and `git init` (9:40)
-- [x] Create feature branch (9:45)
-- [x] Create Remote on Github (9:48)
-- [ ] Backend
-	- [ ] Add Leave Table
-	- [ ] Add migrations
-	- [ ] Add seeded data
-	- [ ] Add Calculated Leave field in User Table
-	- [ ] Add Services and DTOs to Controller/API layer. A new project may be required but no obvious justification to do that yet.
-	- [ ] Add DTOs with 
-		- [ ] Add Leave Request
-		- [ ] Update Leave Request
-		- [ ] Delete Leave Request
-		- [ ] UserWithLeave Model
-	- [ ] Add Service Interface
-	- [ ] Add Service with Dependency Injection
-		- [ ] Add Get all
-		- [ ] Get Get Single
-		- [ ] Add Update Leave
-		- [ ] Add Delete Leave
-		- [ ] Add Update Leave
-		- [ ] Add Check for overlapping
-		- [ ] Add Business Day Calculator
-	- [ ] Add API endpoints to Controller and Link to Service
-	- [ ] Test
+- [x] Planning 
+- [x] `npm install` and `git init` 
+- [x] Create feature branch
+- [x] Create Remote on Github 
+- [x] Backend
+	- [x] Add Leave Table
+	- [x] Add migrations
+	- [x] Add seeded data
+	- [x] Add Calculated Leave field in User Table
+	- [x] Add Services and DTOs to Controller/API layer. A new project may be required but no obvious justification to do that yet.
+	- [x] Add DTOs with 
+		- [x] Upsert Leave Request
+		- [x] UserWithLeave Model
+		- [x] LeaveCheck Response 
+	- [x] Add Service Interface
+	- [x] Add Service with Dependency Injection
+		- [x] Add Get all
+		- [x] Get Get Single
+		- [x] Add Upsert Leave
+		- [x] Add Delete Leave
+		- [x] Add Check Leave
+		- [x] Add Datetime feature for Check for overlapping
+		- [x] Add Datetime feature for Add Business Day Calculator
+	- [x] Add API endpoints to Controller and Link to Service
+	- [x] Add Error Handling
+	- [x] Test
 - FrontEnd
-	- [ ] Add Layout
-	- [ ] Check on initial build bundle size
-	- [ ] Add API requests
-		- [ ] Add API caching
-		- [ ] Add API error handling
-		- [ ] Add Signal
-	- [ ] Connect API to Component
-	- [ ] All Users Component
-		- [ ] Add Column to table for leave summary
-		- [ ] Add Column for View Leave
-		- [ ] Add Modal Component for view all leave. 
-			- [ ] Use a Table for summary
-			- [ ] Add an Add Leave form
-			- [ ] Add a modify Leave form
-			- [ ] Add a Delete leave form
-		- [ ] Connect endpoints to Service
-		- [ ] Handle State Changes
-		- [ ] Add Alerts and Messaging for changes in state
-	- [ ] Test
+	- [x] Add Layout
+	- [x] Check on initial build bundle size
+	- [x] Add API requests
+		- [x] Add API caching. Used state... Considered Debounce vs localStorage. Left in state only.
+		- [x] Add API error handling. Used rxjs catchError and handled response codes accordingly
+		- [x] Add Signal for Employee List
+		- [x] Add Signal for Selected Employee
+		- [x] Added Signal for Server State
+		- [x] Added Enums for Server State
+	- [x] Connect API to Component via signals
+	- [x] All Users Component
+		- [x] Add Column to table for leave summary
+		- [x] Add Column for View Leave
+		- [x] Add Modal Component for view all leave. 
+			- [x] Use a Table for summary
+			- [x] Add an Add/Modify Leave form
+			- [x] Add a Delete leave button
+			- [x] Add a Leave mutation check using the DateRange Picker
+			- [x] Add Button States
+			- [x] Handle Http Error States and post messages
+		- [x] Add Alerts and Messaging for changes in state
+		- [x] Add Documentation 
+	- [x] Test
+	- [x] Review and Cleanup unused variables and logic errors
