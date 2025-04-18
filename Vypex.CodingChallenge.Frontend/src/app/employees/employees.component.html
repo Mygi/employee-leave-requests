@@ -1,14 +1,21 @@
-<nz-table nzTemplateMode>
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (employee of employees$ | async; track employee.id) {
-    <tr>
-      <td>{{ employee.name }}</td>
-    </tr>
-    }
-  </tbody>
-</nz-table>
+@if(employeesData$ | async)
+{
+  <nz-table nzTemplateMode>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Accumulared Leave</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (employee of employees$(); track employee.id) {
+      <tr>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.accumulatedLeaveDays }}</td>
+        <td>action</td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+}

@@ -1,1 +1,40 @@
-<router-outlet></router-outlet>
+<nz-layout>
+    <nz-header>
+        <header>
+            <div class="header">
+                <img src="https://beacon.vypex.com/assets/vypex_logo_transparent_colour_302x97.png">
+                <h1>Coding Challenge</h1>   
+            </div>
+            
+        </header>
+    </nz-header>
+    <nz-content>
+        <div class="main-wrapper">
+            <div class="content-view">
+                @if(serverState$().state == 9) {
+                    <div class="loading-overlay">
+                        loading
+                    </div>
+                }
+                @if(serverState$().state == 7) {
+                    <div class="error-overlay">
+                        loading
+                    </div>
+                }
+                <router-outlet></router-outlet>
+                
+                
+            </div>
+        </div>
+    </nz-content>
+    <nz-footer>
+        <footer>
+            <div class="footer">
+                <h3>
+                Created by Andrew Glenn in April 2025. <a href="https://github.com/Mygi/vypex-challenged">github</a>
+                </h3>
+            </div>
+
+        </footer>
+    </nz-footer>
+</nz-layout>
