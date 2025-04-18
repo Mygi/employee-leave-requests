@@ -11,16 +11,7 @@
     <nz-content>
         <div class="main-wrapper">
             <div class="content-view">
-                @if(serverState$().state == 9) {
-                    <div class="loading-overlay">
-                        loading
-                    </div>
-                }
-                @if(serverState$().state == 7) {
-                    <div class="error-overlay">
-                        loading
-                    </div>
-                }
+               
                 <router-outlet></router-outlet>
                 
                 
