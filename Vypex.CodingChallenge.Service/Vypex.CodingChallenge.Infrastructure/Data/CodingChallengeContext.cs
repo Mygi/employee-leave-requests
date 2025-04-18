@@ -48,10 +48,6 @@ namespace Vypex.CodingChallenge.Infrastructure.Data
                         .HasKey(a => a.Id);
 
             modelBuilder.Entity<EmployeeLeave>()
-                .Property(e => e.EmployeeId)
-                .HasMaxLength(100);
-
-            modelBuilder.Entity<EmployeeLeave>()
                 .Property(e => e.StartDate)
                 .IsRequired()
                 .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
@@ -66,11 +62,7 @@ namespace Vypex.CodingChallenge.Infrastructure.Data
                 .Property(e => e.CalculatedLeaveDays)
                 .IsRequired()
                 .HasDefaultValue(0);
-
-            modelBuilder.Entity<EmployeeLeave>()
-                .HasOne(x => x.Employee)
-                .WithMany()
-                .HasForeignKey(x => x.EmployeeId);
+        
         }
     }
 }
