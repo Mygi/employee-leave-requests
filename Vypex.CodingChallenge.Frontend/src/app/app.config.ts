@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideNzI18n, en_AU } from 'ng-zorro-antd/i18n'
+import { provideNzI18n, en_US } from 'ng-zorro-antd/i18n'
 import {
   EditFill,
   DeleteFill
@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideNzI18n(en_AU),
+    provideNzI18n(en_US),
     provideNzIcons()
   ]
 };

@@ -28,7 +28,7 @@ namespace Vypex.CodingChallenge.API.Services
         {
             var employee = await context.Employees.Include(e => e.AllocatedLeave).FirstOrDefaultAsync(e => e.Id == request.EmployeeId) ?? throw new KeyNotFoundException("Can not find an employee by that ID ");
             employee.AllocatedLeave ??= [];
-            if (employee.AllocatedLeave.Any(x => DateTimeExtensions.DateRangesOvelap(new Tuple<DateTime, DateTime>(request.StartDate, request.EndDate), new Tuple<DateTime, DateTime>(x.StartDate, x.EndDate))))
+            if (employee.AllocatedLeave.Any(x => (x.Id != request.Id) && DateTimeExtensions.DateRangesOvelap(new Tuple<DateTime, DateTime>(request.StartDate, request.EndDate), new Tuple<DateTime, DateTime>(x.StartDate, x.EndDate))))
             {
                 throw new InvalidDataException("Requested leave date ovelaps with existing leave");
             }

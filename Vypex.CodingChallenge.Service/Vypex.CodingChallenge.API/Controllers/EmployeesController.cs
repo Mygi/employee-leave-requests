@@ -48,7 +48,8 @@ namespace Vypex.CodingChallenge.API.Controllers
                 return Ok(employee);
             }
             catch(KeyNotFoundException ex) {
-                return NotFound(ex.Message);
+                _logger.LogWarning("Employee was not found for that Employee ID", [ex]);
+                return NotFound("Employee was not found for that Employee ID");
             } 
             catch(Exception) {
                 // Returnong bad request in case secure messages appear in response
@@ -75,10 +76,12 @@ namespace Vypex.CodingChallenge.API.Controllers
                 return Accepted(result);
             }
             catch(InvalidDataException ex) {
-                return Conflict(ex);
+                _logger.LogWarning("Proposed Leave change would overlap with existing leave", [ex]);
+                return Conflict(new { message = "Proposed Leave change would overlap with existing leave" });
             } 
             catch(KeyNotFoundException ex) {
-                return NotFound(ex.Message);
+                _logger.LogWarning("Leave was not found for that Leave ID", [ex]);
+                return NotFound("Leave was not found for that Leave ID");
             } 
             catch
             {
@@ -91,7 +94,7 @@ namespace Vypex.CodingChallenge.API.Controllers
 
 
         [HttpDelete("leave/{leaveId:guid}")]
-        [ProducesResponseType<LeaveChangeResponseDto>(StatusCodes.Status202Accepted)]
+        [ProducesResponseType<int>(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteLeave(Guid leaveId)
         {
@@ -101,7 +104,8 @@ namespace Vypex.CodingChallenge.API.Controllers
                 return Accepted(result);
             }
             catch(KeyNotFoundException ex) {
-                return NotFound(ex.Message);
+                _logger.LogWarning("Leave was not found for that Leave ID", [ex]);
+                return NotFound("Leave was not found for that Leave ID");
             } 
             catch
             {

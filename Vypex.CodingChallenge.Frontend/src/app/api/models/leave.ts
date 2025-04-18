@@ -6,7 +6,7 @@ export interface Leave {
 }
 
 export interface LeaveRequest {
-    id: string;
+    id?: string;
     startDate: string;
     endDate: string;
     employeeId: string;
