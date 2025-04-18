@@ -11,12 +11,16 @@ namespace Vypex.CodingChallenge.Service
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
 
             builder.Services
                 .AddApiModule()
                 .AddDomainModule()
                 .AddInfrastructureModule(builder.Configuration.GetConnectionString("DefaultConnection") ??
                     throw new ArgumentException("Connection string not specified"));
+
 
             builder.Services
                 .AddControllers()

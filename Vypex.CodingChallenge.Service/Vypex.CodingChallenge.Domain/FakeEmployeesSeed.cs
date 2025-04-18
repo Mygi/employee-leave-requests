@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bogus;
+using Vypex.CodingChallenge.Domain.DateExtensions;
 using Vypex.CodingChallenge.Domain.Models;
 namespace Vypex.CodingChallenge.Domain
 {
