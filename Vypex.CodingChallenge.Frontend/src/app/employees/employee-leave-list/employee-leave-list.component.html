@@ -1,0 +1,54 @@
+
+<div class="leave-list">    
+      @if(selectedEmployee$())
+      {      
+        <nz-table nzTemplateMode [nzData]="selectedEmployee$().leaveTaken" #employeeLeaveTable>
+          <thead>
+            <tr>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Leave Days Taken</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (leave of employeeLeaveTable.data; track leave.id) {
+            <tr>
+              <td>{{ leave.startDate | date: "mediumDate" }}</td>
+              <td>{{ leave.endDate | date: "mediumDate" }}</td>
+              <td>{{ leave.leaveDaysAllocated }}</td>
+              <td>
+                <button nz-button nzType="default" (click)="editLeave(leave)" nzShape="circle">
+                    <nz-icon nzType="edit" nzTheme="fill" />
+                  </button>
+                  <button nz-button nzDanger (click)="deleteLeave(leave)" nzShape="circle">
+                    <nz-icon nzType="delete" nzTheme="fill" />
+                  </button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </nz-table>
+        @if (showLeaveForm) {
+            <div class="UpsertLeaveForm">
+                <div class="date-range-row">
+                    <nz-range-picker [(ngModel)]="date" (ngModelChange)="updateRange($event)"></nz-range-picker>
+                  </div>
+                  <div class="button">Apply for Leave</div>
+                  <div class="warning">
+                    Leave Days Taken <strong> {{ currentLeave.leaveDaysAllocated }} </strong> <br />
+                    New Total Leave if Approved: <strong> {{selectedEmployee$().accumulatedLeaveDays}}</strong>
+                  </div>
+            </div>
+        }
+      
+    }
+    @else {
+      <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="currentColor"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>
+    }
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default">Add Leave</button>
+    <button nz-button nzType="default">Save Changes</button>
+    <button nz-button nzType="primary">Cancel</button>
+  </div>
