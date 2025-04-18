@@ -1,0 +1,28 @@
+.modal-content {
+    height:200px;
+    width: 600px;
+    p,div {
+        text-align: center;
+
+    }
+  }
+
+.upsert-leave-form {
+  border-top: Solid 1px gray;
+  border-bottom: Solid 1px gray;
+  padding-top: 20px;
+  text-align: center;
+}
+.date-range-row {
+    margin-bottom: 20px;
+}
+.confirm-box {
+    margin-top: 20px;
+    text-align: center;
+    p {
+        margin-top: 10px;
+    }
+}
+.leave-list {
+    width: 600px;
+}

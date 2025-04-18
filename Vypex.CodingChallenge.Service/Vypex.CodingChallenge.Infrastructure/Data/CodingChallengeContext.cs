@@ -7,7 +7,7 @@ namespace Vypex.CodingChallenge.Infrastructure.Data
     public class CodingChallengeContext : DbContext
     {
         public DbSet<Employee> Employees { get; set; } = default!;
-
+        public DbSet<EmployeeLeave> EmployeeLeave { get; set; } = default!;
         public CodingChallengeContext()
         {
         }
@@ -20,7 +20,9 @@ namespace Vypex.CodingChallenge.Infrastructure.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder
             .UseSeeding((context, _) =>
             {
-                context.Set<Employee>().AddRange(FakeEmployeesSeed.Generate(20));
+                var seeded_employees = FakeEmployeesSeed.Generate(20);
+                context.Set<Employee>().AddRange(seeded_employees);
+                
                 context.SaveChanges();
             });
 
@@ -34,6 +36,33 @@ namespace Vypex.CodingChallenge.Infrastructure.Data
             modelBuilder.Entity<Employee>()
                 .Property(e => e.Name)
                 .HasMaxLength(100);
+
+            // Shouldn't really be able to hard delete an employee with history but we will cascade delete leave
+            modelBuilder.Entity<Employee>()
+                .HasMany( e => e.AllocatedLeave)
+                .WithOne( a => a.Employee)
+                .HasForeignKey( a => a.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<EmployeeLeave>()
+                        .HasKey(a => a.Id);
+
+            modelBuilder.Entity<EmployeeLeave>()
+                .Property(e => e.StartDate)
+                .IsRequired()
+                .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+            modelBuilder.Entity<EmployeeLeave>()
+                .Property(e => e.EndDate)
+                .IsRequired()
+                .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+            
+            modelBuilder.Entity<EmployeeLeave>()
+                .Property(e => e.CalculatedLeaveDays)
+                .IsRequired()
+                .HasDefaultValue(0);
+        
         }
     }
 }

@@ -1,0 +1,40 @@
+
+.main-wrapper {
+    background-image: url('https://beacon.vypex.com/assets/login_background_2000x1200.png')
+
+}
+.content-view {
+    max-width: 1920px;
+    margin: auto;
+}
+.header {
+        padding: 20px;
+        text-align: center;
+        background-color: Black;
+    
+    h1 {
+        color: white;
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        margin-left: 190px;
+        margin-top: -30px;
+    }
+}
+.footer {
+    
+    background-color: Black;
+    bottom:0px;
+    position: absolute;
+    width: 100vw;
+    height: 50vh;
+    z-index: -1;
+    color: white;
+    text-align: center;
+    h3 {
+        margin-top: 25px;
+        color: white;
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        width: 100vw;
+        position: inherit;
+        bottom: 20px;
+    }
+}
