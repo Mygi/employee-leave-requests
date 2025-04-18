@@ -4,8 +4,8 @@ This is the following Schedule and Processing of tasks for implementing the staf
 
 - [x] Planning (9:30)
 - [x] `npm install` and `git init` (9:40)
-- [x] Create feature branch
-- [ ] Create Remote on Github
+- [x] Create feature branch (9:45)
+- [x] Create Remote on Github (9:48)
 - [ ] Backend
 	- [ ] Add Leave Table
 	- [ ] Add migrations
