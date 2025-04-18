@@ -33,8 +33,13 @@
         @if (showLeaveForm) {
             <div class="upsert-leave-form">
                 <fieldset>
-                    <p>{{leaveText}} 
-                        
+                    <p>
+                      @if(alterState === datastateEnum.UPDATED) {
+                       Modify Leave
+                      }
+                      @else {
+                        Create Leave
+                      }                        
                     </p>
                     <div class="date-range-row">                        
                         <nz-range-picker [(ngModel)]="date" (ngModelChange)="updateRange($event)"></nz-range-picker>
@@ -48,7 +53,20 @@
         }
         @if(previewUpdates) {
             <div class="confirm-box">
-            {{alterState}}
+              <strong>
+              @switch (alterState) {
+              
+              @case(datastateEnum.CREATED){
+                Creating Leave
+              }
+              @case(datastateEnum.DELETED){
+                Deleting Leave
+              }
+              @case(datastateEnum.UPDATED){
+                Modifying Leave
+              }            
+            }
+          </strong>
             <p>
                 Are you sure you want to save these changes of leave for {{selectedEmployee$().name}}
             </p>
@@ -57,36 +75,41 @@
                 &nbsp; &nbsp;
                 <button nz-button nzType="default" (click)="previewUpdates=false">Cancel</button>
             </p>
-            @if(serverState$().state == 4) {
+            @switch (serverState$().state) {
+              @case(datastateEnum.DELETED) {
                 <div class="warning">
                     <h4>Leave Successfully Deleted</h4>
                     {{serverState$().message}}
                   </div>
-              }
-              @if(serverState$().state == 3) {
+                }
+              @case(datastateEnum.UPDATED) {
                 <div class="warning">
                     <h4>Leave Successfully Updated</h4>
                     {{serverState$().message}}
                   </div>
               }
-              @if(serverState$().state == 2) {
+              @case(datastateEnum.CREATED) {
                 <div class="warning">
                     <h4>Leave Successfully Created</h4>
                     {{serverState$().message}}
                   </div>
               }
-              @if(serverState$().state == 6) {
+              @case(datastateEnum.CONFLICT) {
                 <div class="warning">
                     <h4>There is a conflict between leave for {{selectedEmployee$().name}}</h4>
                     {{serverState$().message}}
                   </div>
               }
-              @if(serverState$().state == 7) {
+              @case(datastateEnum.ERROR) {
                 <div class="warning">
                     <h4>An Error occured with the leave change</h4>
                     {{serverState$().message}}
                   </div>
               }
+              @default {
+
+              }
+            }
         </div>
         }
               

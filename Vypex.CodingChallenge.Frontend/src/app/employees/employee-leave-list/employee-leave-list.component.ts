@@ -26,15 +26,16 @@ import { ServerStates } from '../../api/models/serrver-states';
   ]
 })
 export class EmployeeLeaveListComponent {
-  private readonly employeeApiService = inject(EmployeeApiService);
-  public serverState$ = this.employeeApiService.serverState$;
+  private readonly employeeApiService = inject(EmployeeApiService);  
   private readonly modal = inject(NzModalRef);
-  public readonly selectedEmployee$ = this.employeeApiService.selectedEmployee$;
-  public showLeaveForm = false;
-  public hasResponse = false;
+  protected readonly datastateEnum = ServerStates;
+  protected serverState$ = this.employeeApiService.serverState$;  
+  protected readonly selectedEmployee$ = this.employeeApiService.selectedEmployee$;
+  
   public noChanges = true;
-  public leaveText = "Modify Leave";
-  public alterState = ""
+  public alterState = this.datastateEnum.INIT;
+  public showLeaveForm = false;
+  public date:Date[] =[];
   public previewUpdates = false;
   public currentLeave: Leave = {
     id: "",
@@ -42,7 +43,7 @@ export class EmployeeLeaveListComponent {
     endDate: new Date(Date.now() + 640000).toISOString(),
     leaveDaysAllocated: 0
   };
-  public date =[new Date(Date.parse(this.currentLeave.startDate)), new Date(Date.parse(this.currentLeave.endDate))];
+  
 
   public updateRange(event: Date[]) {
     if(event.length < 2) {
@@ -62,18 +63,17 @@ export class EmployeeLeaveListComponent {
   }
 
   public editLeave(leave: Leave) {
-    this.leaveText = "Modify Leave";
     this.currentLeave = leave;
     this.date = [new Date(Date.parse(this.currentLeave.startDate)), new Date(Date.parse(this.currentLeave.endDate))];
     this.showLeaveForm = true;
-    this.alterState = "Updating Leave";
+    this.alterState = ServerStates.UPDATED;
   }
 
   public deleteLeave(leave: Leave) {
     this.currentLeave = leave;
     this.showLeaveForm = false;
     this.previewUpdates = true;
-    this.alterState = "Deleting Leave";
+    this.alterState = ServerStates.DELETED;
   }
 
   public saveChanges() {
@@ -82,13 +82,13 @@ export class EmployeeLeaveListComponent {
   }
 
   public handleCommit() {
-    if(this.alterState == "Deleting Leave") {
+    if(this.alterState === ServerStates.DELETED) {
       this.employeeApiService.deleteEmployeeLeave(this.currentLeave.id, this.selectedEmployee$().id);
     }
-    if(this.alterState == "Creating Leave") {
+    if(this.alterState === ServerStates.CREATED) {
       this.employeeApiService.insertEmployeeLeave(this.selectedEmployee$().id, this.currentLeave);
     }
-    if(this.alterState == "Updating Leave") {
+    if(this.alterState == ServerStates.UPDATED) {
       this.employeeApiService.updateEmployeeLeave(this.selectedEmployee$().id, this.currentLeave);
     }
     this.noChanges = true;
@@ -97,7 +97,6 @@ export class EmployeeLeaveListComponent {
     return !(this.serverState$().state in [ServerStates.CREATED,ServerStates.DELETED,ServerStates.UPDATED])
   }
   public addLeave() {
-    this.leaveText = "Add new Leave";
     this.date = [];
     this.currentLeave = {
       id: "",
@@ -108,7 +107,7 @@ export class EmployeeLeaveListComponent {
     this.showLeaveForm = true;
     this.noChanges = true;
     this.previewUpdates = false;
-    this.alterState = "Creating Leave";
+    this.alterState = ServerStates.CREATED;
   }
   public closeModal(){
     this.employeeApiService.resetServerState();
