@@ -24,8 +24,15 @@ namespace Vypex.CodingChallenge.API.Services
         /// <exception cref="InvalidDataException"></exception>
         /// <exception cref="KeyNotFoundException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<LeaveChangeResponseDto> UpsertEmployeeLeaveAsync(LeaveChangeRequestDto request)
+        public async Task<EmployeeLeaveDto> UpsertEmployeeLeaveAsync(LeaveChangeRequestDto request)
         {
+             if(request.StartDate > request.EndDate) {
+                throw new InvalidDataException("Proposed Leave would end before it starts");                             
+            }
+            var calculatedLeaveDays = DateTimeExtensions.BusinessDaysUntil(request.StartDate, request.EndDate);
+            if(calculatedLeaveDays == 0) {
+                    throw new InvalidDataException("No Leave Days allocated");
+            }
             var employee = await context.Employees.Include(e => e.AllocatedLeave).FirstOrDefaultAsync(e => e.Id == request.EmployeeId) ?? throw new KeyNotFoundException("Can not find an employee by that ID ");
             employee.AllocatedLeave ??= [];
             if (employee.AllocatedLeave.Any(x => (x.Id != request.Id) && DateTimeExtensions.DateRangesOvelap(new Tuple<DateTime, DateTime>(request.StartDate, request.EndDate), new Tuple<DateTime, DateTime>(x.StartDate, x.EndDate))))
@@ -35,13 +42,15 @@ namespace Vypex.CodingChallenge.API.Services
             EmployeeLeave? leaveUnderWork = default;
             if (request.Id == default)
             {
+                
                 leaveUnderWork = new EmployeeLeave()
                 {
                     StartDate = request.StartDate,
                     EndDate = request.EndDate,
                     EmployeeId = request.EmployeeId,
-                    CalculatedLeaveDays = DateTimeExtensions.BusinessDaysUntil(request.StartDate, request.EndDate)
+                    CalculatedLeaveDays = calculatedLeaveDays
                 };
+                
                 employee.AllocatedLeave.Add(leaveUnderWork);
 
             }
@@ -50,7 +59,7 @@ namespace Vypex.CodingChallenge.API.Services
                 leaveUnderWork = employee.AllocatedLeave.FirstOrDefault(a => a.Id == request.Id) ?? throw new KeyNotFoundException("Referenced Allocated Leave not found for employee");
                 leaveUnderWork.StartDate = request.StartDate;
                 leaveUnderWork.EndDate = request.EndDate;
-                leaveUnderWork.CalculatedLeaveDays = DateTimeExtensions.BusinessDaysUntil(request.StartDate, request.EndDate);
+                leaveUnderWork.CalculatedLeaveDays = calculatedLeaveDays;
             }
             try
             {
@@ -59,16 +68,7 @@ namespace Vypex.CodingChallenge.API.Services
                 {
                     throw new Exception("Leave is no longer in context");
                 }
-                return new LeaveChangeResponseDto()
-                {
-                    LeaveId = leaveUnderWork.Id,
-                    StartDate = leaveUnderWork.StartDate,
-                    EndDate = leaveUnderWork.EndDate,
-                    LeaveDaysTaken = leaveUnderWork.CalculatedLeaveDays,
-                    UpdatedEmployeAnnualLeave = employee.AllocatedLeave.Sum(x => x.CalculatedLeaveDays),
-                    EmployeeId = employee.Id
-
-                };
+                return await GetEmployeeWithLeaveAsync(request.EmployeeId);
             }
             catch (DbException ex)
             {
@@ -78,23 +78,66 @@ namespace Vypex.CodingChallenge.API.Services
         }
 
         /// <summary>
+        /// Used as a preflight check before modifying data
+        /// </summary>
+        /// <param name="leaveRequest"></param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        public async Task<LeaveChangeResponseDto> CheckLeaveConstraints(LeaveChangeRequestDto leaveRequest ) {
+            if(leaveRequest.StartDate > leaveRequest.EndDate) {
+                return new LeaveChangeResponseDto() {
+                    Reason = "Proposed Leave would end before it starts",
+                    Allowed = false,
+                    LeaveDaysTaken = 0
+                };
+            }
+            
+            var leaveDays = DateTimeExtensions.BusinessDaysUntil(leaveRequest.StartDate, leaveRequest.EndDate);
+            if(leaveDays == 0) {
+                return new LeaveChangeResponseDto() {
+                    Reason = "No Business Days Taken in Leave",
+                    Allowed = false,
+                    LeaveDaysTaken = 0
+                };
+            }
+
+            var employee = await context.Employees.Include(e => e.AllocatedLeave).FirstOrDefaultAsync(e => e.Id == leaveRequest.EmployeeId) ?? throw new KeyNotFoundException("Can not find an employee by that ID ");
+            employee.AllocatedLeave ??= [];
+            
+            if (employee.AllocatedLeave.Any(x => (x.Id != leaveRequest.Id) && DateTimeExtensions.DateRangesOvelap(new Tuple<DateTime, DateTime>(leaveRequest.StartDate, leaveRequest.EndDate), new Tuple<DateTime, DateTime>(x.StartDate, x.EndDate))))
+            {
+                return new LeaveChangeResponseDto() {
+                    Reason = "Proposed Leave would overlap with existing leave",
+                    Allowed = false,
+                    LeaveDaysTaken = 0
+                };
+            }
+            var existingLeave = employee.AllocatedLeave.FirstOrDefault(x => x.Id == leaveRequest.Id);
+            return new LeaveChangeResponseDto() {
+                Reason = "Success",
+                Allowed = true,
+                LeaveDaysTaken = existingLeave != default ? leaveDays - existingLeave.CalculatedLeaveDays  + employee.AllocatedLeave.Sum(x => x.CalculatedLeaveDays)
+                                                          : leaveDays + employee.AllocatedLeave.Sum(x => x.CalculatedLeaveDays)
+            };
+        }
+
+        /// <summary>
         /// Delete Leave if found
         /// </summary>
         /// <param name="leaveId"></param>
         /// <returns>The updated count for leave taken</returns>
-        public async Task<int> DeleteEmployeeLeaveAsync(Guid leaveId)
+        public async Task<EmployeeLeaveDto> DeleteEmployeeLeaveAsync(Guid leaveId)
         {
             var leave = await context.EmployeeLeave.FirstOrDefaultAsync(l => l.Id == leaveId);
             if (leave != null)
             {
                 try {
                     var employee = await GetEmployeeWithLeaveAsync(leave.EmployeeId);
-                    var currentCount = employee.AccumulatedLeaveDays - leave.CalculatedLeaveDays;
                     context.EmployeeLeave.Remove(leave);
                     // Update Leave Count
                     
                     await context.SaveChangesAsync();
-                    return currentCount;
+                    return await GetEmployeeWithLeaveAsync(leave.EmployeeId);
                 }
                 catch (DbException ex)
                 {

@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { EmployeeApiService, Leave } from '../../api';
+import { EmployeeApiService, Leave, LeaveResponse } from '../../api';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { DatePipe } from '@angular/common';
@@ -31,12 +31,16 @@ export class EmployeeLeaveListComponent {
   protected readonly datastateEnum = ServerStates;
   protected serverState$ = this.employeeApiService.serverState$;  
   protected readonly selectedEmployee$ = this.employeeApiService.selectedEmployee$;
-  
+  public leaveCheck$: WritableSignal<LeaveResponse | undefined> = signal(undefined);
+  public cannotCommit$:WritableSignal<boolean> = signal(false);
+
   public noChanges = true;
   public alterState = this.datastateEnum.INIT;
   public showLeaveForm = false;
   public date:Date[] =[];
   public previewUpdates = false;
+  public showLoader = false;
+  
   public currentLeave: Leave = {
     id: "",
     startDate: new Date(Date.now()).toISOString(),
@@ -49,6 +53,7 @@ export class EmployeeLeaveListComponent {
     if(event.length < 2) {
       return;
     }
+    
     const startDate =event[0];
     const endDate = event[1];
     if(this.currentLeave.startDate !== startDate.toISOString()){
@@ -72,29 +77,49 @@ export class EmployeeLeaveListComponent {
   public deleteLeave(leave: Leave) {
     this.currentLeave = leave;
     this.showLeaveForm = false;
-    this.previewUpdates = true;
     this.alterState = ServerStates.DELETED;
+    this.employeeApiService.checkDeletedLeaveRequest(leave, this.selectedEmployee$())
+                           .then( result => {
+                            this.leaveCheck$.set(result);
+                            this.employeeApiService.resetServerState();
+                            this.noChanges = true;
+                            this.cannotCommit$.set(false);
+  });
   }
 
   public saveChanges() {
     this.employeeApiService.resetServerState();
-    this.previewUpdates = true;
+    this.employeeApiService.checkLeaveRequest({
+      startDate: this.currentLeave.startDate,
+      endDate: this.currentLeave.endDate,
+      employeeId: this.selectedEmployee$().id,
+      id: this.currentLeave.id == "" ? undefined : this.currentLeave.id
+    }).then( result => {
+      this.employeeApiService.resetServerState();
+      this.leaveCheck$.set(result);
+      this.noChanges = true;
+      this.cannotCommit$.set(!result.allowed);
+  });;
+  }
+  cancelChanges() {
+    this.leaveCheck$.set(undefined);
+    this.noChanges = true;
   }
 
   public handleCommit() {
+    // this could be a signal instead. Would be cooler to handle together and respond with signle signal but time is upon us
+    this.showLoader = true;
+    this.cannotCommit$.set(true);
     if(this.alterState === ServerStates.DELETED) {
-      this.employeeApiService.deleteEmployeeLeave(this.currentLeave.id, this.selectedEmployee$().id);
+      this.employeeApiService.deleteEmployeeLeave(this.currentLeave.id, this.selectedEmployee$().id).then(complete => this.showLoader = false);
     }
     if(this.alterState === ServerStates.CREATED) {
-      this.employeeApiService.insertEmployeeLeave(this.selectedEmployee$().id, this.currentLeave);
+      this.employeeApiService.insertEmployeeLeave(this.selectedEmployee$().id, this.currentLeave).then(complete => this.showLoader = false);
     }
     if(this.alterState == ServerStates.UPDATED) {
-      this.employeeApiService.updateEmployeeLeave(this.selectedEmployee$().id, this.currentLeave);
+      this.employeeApiService.updateEmployeeLeave(this.selectedEmployee$().id, this.currentLeave).then(complete => this.showLoader = false);
     }
     this.noChanges = true;
-  }
-  public canCommit() {
-    return !(this.serverState$().state in [ServerStates.CREATED,ServerStates.DELETED,ServerStates.UPDATED])
   }
   public addLeave() {
     this.date = [];

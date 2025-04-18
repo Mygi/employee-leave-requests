@@ -51,7 +51,7 @@
                   
             </div>
         }
-        @if(previewUpdates) {
+        @if(leaveCheck$() !== undefined) {
             <div class="confirm-box">
               <strong>
               @switch (alterState) {
@@ -68,12 +68,22 @@
             }
           </strong>
             <p>
-                Are you sure you want to save these changes of leave for {{selectedEmployee$().name}}
+              @if(leaveCheck$() !== undefined && leaveCheck$()?.allowed) {
+                <p>Are you sure you want to save these changes of leave for {{selectedEmployee$().name}}.</p>
+                <p>
+                After updating {{selectedEmployee$().name}} will have used {{leaveCheck$()?.leaveDaysTaken}} days of leave
+              </p>
+              }
+              @if(leaveCheck$() !== undefined && !leaveCheck$()?.allowed) {
+                <p>Cannot update leave for {{selectedEmployee$().name}}.</p>
+                <p> Reason given: {{leaveCheck$()?.reason}}
+                </p>
+              }
             </p>
                 <p>
-                <button nz-button nzType="primary" [disabled]="canCommit()" [nzLoading]="serverState$().state == 9" (click)="handleCommit()">Yes</button>
+                <button nz-button nzType="primary" [disabled]="cannotCommit$()" [nzLoading]="showLoader" (click)="handleCommit()">Yes</button>
                 &nbsp; &nbsp;
-                <button nz-button nzType="default" (click)="previewUpdates=false">Cancel</button>
+                <button nz-button nzType="default" (click)="cancelChanges()">Cancel</button>
             </p>
             @switch (serverState$().state) {
               @case(datastateEnum.DELETED) {

@@ -27,7 +27,6 @@ export class EmployeesComponent {
   public sortFn: NzTableSortFn<Employee> = (a: Employee, b: Employee) => a.name.localeCompare(b.name);
 
   public viewLeave(employee: Employee) {
-    console.log("employee", employee);
     this.employeeApiService.selectedEmployee$.set(employee);
     this.modalService.create({
       nzTitle: 'Viewing Leave for ' + employee.name,

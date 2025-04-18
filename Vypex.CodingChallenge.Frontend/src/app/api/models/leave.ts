@@ -13,10 +13,8 @@ export interface LeaveRequest {
 }
 
 export interface LeaveResponse {
-    id: string;
-    startDate: string;
-    endDate: string;
-    employeeId: string;
+    allowed: boolean;
     leaveDaysTaken: number;
-    updatedEmployeAnnualLeave: number
+    reason: string;
+
 }

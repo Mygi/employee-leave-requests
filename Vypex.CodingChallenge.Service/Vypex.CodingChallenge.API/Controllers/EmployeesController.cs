@@ -60,11 +60,11 @@ namespace Vypex.CodingChallenge.API.Controllers
         }
 
         [HttpPut("UpsertLeave")]
-        [ProducesResponseType<LeaveChangeResponseDto>(StatusCodes.Status202Accepted)]
+        [ProducesResponseType<EmployeeLeaveDto>(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<LeaveChangeResponseDto>> UpsertLeaveAsync(LeaveChangeRequestDto leaveRequest)
+        public async Task<ActionResult<EmployeeLeaveDto>> UpsertLeaveAsync(LeaveChangeRequestDto leaveRequest)
         {            
             try 
             {
@@ -92,11 +92,40 @@ namespace Vypex.CodingChallenge.API.Controllers
             
         }
 
+        [HttpPost("CheckConstraints")]
+        [ProducesResponseType<LeaveChangeResponseDto>(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<LeaveChangeResponseDto>> CheckLeaveConstraints(LeaveChangeRequestDto leaveRequest)
+        {            
+            try 
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await employeeLeaveService.CheckLeaveConstraints(leaveRequest);
+                return Accepted(result);
+            }
+            catch(KeyNotFoundException ex) {
+                _logger.LogWarning("Leave was not found for that Leave ID", [ex]);
+                return NotFound("Leave was not found for that Leave ID");
+            } 
+            catch
+            {
+                return BadRequest();
+            }
+            
+
+            
+        }
+
 
         [HttpDelete("leave/{leaveId:guid}")]
+        [ProducesResponseType<EmployeeLeaveDto>(StatusCodes.Status202Accepted)]
         [ProducesResponseType<int>(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteLeave(Guid leaveId)
+        public async Task<ActionResult<EmployeeLeaveDto>> DeleteLeave(Guid leaveId)
         {
             try 
             {
