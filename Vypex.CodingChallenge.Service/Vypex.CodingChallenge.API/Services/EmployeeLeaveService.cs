@@ -26,7 +26,7 @@ namespace Vypex.CodingChallenge.API.Services
         /// <exception cref="Exception"></exception>
         public async Task<LeaveChangeResponseDto> UpsertEmployeeLeaveAsync(LeaveChangeRequestDto request)
         {
-            var employee = await context.Employees.Include(e => e.AllocatedLeave).FirstOrDefaultAsync(e => e.Id == request.EmployeeId) ?? throw new ArgumentException("Can not find an employee by that ID ");
+            var employee = await context.Employees.Include(e => e.AllocatedLeave).FirstOrDefaultAsync(e => e.Id == request.EmployeeId) ?? throw new KeyNotFoundException("Can not find an employee by that ID ");
             employee.AllocatedLeave ??= [];
             if (employee.AllocatedLeave.Any(x => DateTimeExtensions.DateRangesOvelap(new Tuple<DateTime, DateTime>(request.StartDate, request.EndDate), new Tuple<DateTime, DateTime>(x.StartDate, x.EndDate))))
             {
