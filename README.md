@@ -88,8 +88,9 @@ If you want to regenerate the SQLite db use the following command. The `--startu
 Once you've completed the test, create a zip archive of your submission and send it to the recruiter.
 
 ## Completion
-Tasks completed for this work, see [documentation]("/docs/employee-leave-feature.md")
+Tasks completed for this work, see [documentation](docs/employee-leave-feature.md)
 
-![Ui Example]("Screenshot 2025-04-19 091812.png?raw=true "Ui Example")
+UI Example
+![Ui Example](UIScreenShot.png?raw=true "Ui Example")
 
 Thank you and good luck!
