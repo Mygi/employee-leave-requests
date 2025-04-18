@@ -4,9 +4,9 @@ namespace Vypex.CodingChallenge.API.Services {
 
     public interface IEmployeeLeaveService {
 
-       Task<LeaveChangeResponseDto> PatchEmployeeLeaveAsync(LeaveChangeRequestDto request);
+       Task<LeaveChangeResponseDto> UpsertEmployeeLeaveAsync(LeaveChangeRequestDto request);
 
-       Task<bool> DeleteEmployeeLeaveAsync(Guid LeaveId);
+       Task<int> DeleteEmployeeLeaveAsync(Guid LeaveId);
 
        Task<List<EmployeeLeaveDto>> GetEmployeesWithLeaveAsync();
 

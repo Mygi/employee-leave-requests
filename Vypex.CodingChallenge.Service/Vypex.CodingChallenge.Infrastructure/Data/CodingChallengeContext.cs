@@ -7,7 +7,7 @@ namespace Vypex.CodingChallenge.Infrastructure.Data
     public class CodingChallengeContext : DbContext
     {
         public DbSet<Employee> Employees { get; set; } = default!;
-
+        public DbSet<EmployeeLeave> EmployeeLeave { get; set; } = default!;
         public CodingChallengeContext()
         {
         }
